@@ -54,15 +54,15 @@ impl LinearRegression {
                 }
                 for i in 0..self.iterations {
                     let y_pred: DVector<f32> = &x_train_vector * self.w[0] + DVector::from_element(x_train_vector.len(), self.b);
-                    let error: DVector<f32> = y_train.clone() - y_pred.clone();
+                    let error: DVector<f32> = y_pred.clone()- y_train.clone();
                     if show_cost {
                         let cost: f32 = LinearRegression::cost(&y_train, &y_pred);
                         println!("Cost for iteration {:?}: {:?}", i + 1, cost);
                     }
                     let dw: f32 = (1.0 / m) * x_train_vector.dot(&error);
                     let db: f32 = (1.0 / m) * error.sum();
-                    self.w[0] += self.alpha * dw;
-                    self.b += self.alpha * db;
+                    self.w[0] -= self.alpha * dw.clone();
+                    self.b -= self.alpha * db.clone();
                     if __debug{
                         println!("dw:{:?}, db:{:?} for iteration {:?}", dw, db,i+1);
                         println!("w:{:?}, b:{:?} for iteration {:?}", self.w, self.b,i+1);
@@ -75,15 +75,15 @@ impl LinearRegression {
                 }
                 for i in 0..self.iterations {
                     let y_pred: DVector<f32> = x_train_matrix.clone() * &self.w + DVector::from_element(x_train_matrix.nrows(), self.b);
-                    let error: DVector<f32> = y_train.clone() - y_pred.clone();
+                    let error: DVector<f32> = y_pred.clone()- y_train.clone();
                     if show_cost {
                         let cost: f32 = LinearRegression::cost(&y_train, &y_pred);
                         println!("Cost for iteration {:?}: {:?}", i + 1, cost);
                     }
                     let dw: DVector<f32> = (1.0 / m) * x_train_matrix.transpose() * &error;
                     let db: f32 = (1.0 / m) * error.sum();
-                    self.w += self.alpha * dw.clone();
-                    self.b += self.alpha * db.clone();
+                    self.w -= self.alpha * dw.clone();
+                    self.b -= self.alpha * db.clone();
                     if __debug {
                         println!("dw:{:?}, db:{:?} for iteration {:?}", dw, db,i+1);
                         println!("w:{:?}, b:{:?} for iteration {:?}", self.w, self.b,i+1);
