@@ -4,6 +4,7 @@ use std::error::Error;
 use std::fmt;
 
 #[derive(Debug)]
+#[allow(dead_code)]
 enum LinearRegressionError {
     DimensionMismatch,
     Other(String),
@@ -65,7 +66,7 @@ impl LinearRegression {
                     self.b -= self.alpha * db.clone();
                     if __debug{
                         println!("dw:{:?}, db:{:?} for iteration {:?}", dw, db,i+1);
-                        println!("w:{:?}, b:{:?} for iteration {:?}", self.w, self.b,i+1);
+                        println!("w:{:?}, b:{:?} for iteration {:?}", self.w[0], self.b,i+1);
                     }
                 }
             }
@@ -123,7 +124,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let y_train_matrix: DVector<f32> = DVector::from_column_slice(&[1.0, 2.0, 3.0]);
 
     let mut model_multiple = LinearRegression::new(0.01, 1000, x_train_matrix.ncols());
-    model_multiple.fit(Features::Multiple(x_train_matrix.clone()), y_train_matrix.clone(), true,false)?;
+    model_multiple.fit(Features::Multiple(x_train_matrix.clone()), y_train_matrix.clone(), false,false)?;
 
     let y_pred_matrix = model_multiple.predict(Features::Multiple(x_train_matrix.clone()))?;
     println!("Predictions with matrix input: {:?}", y_pred_matrix);
