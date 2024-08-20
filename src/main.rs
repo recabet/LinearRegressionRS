@@ -82,9 +82,9 @@ impl LinearRegression {
                     }
                     let dw: DVector<f32> = (1.0 / m) * x_train_matrix.transpose() * &error;
                     let db: f32 = (1.0 / m) * error.sum();
-                    self.w += self.alpha * dw;
-                    self.b += self.alpha * db;
-                    if __debug{
+                    self.w += self.alpha * dw.clone();
+                    self.b += self.alpha * db.clone();
+                    if __debug {
                         println!("dw:{:?}, db:{:?} for iteration {:?}", dw, db,i+1);
                         println!("w:{:?}, b:{:?} for iteration {:?}", self.w, self.b,i+1);
                     }
